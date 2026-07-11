@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-900 min-h-screen flex items-center justify-center">
+
+<div class="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8">
+
+    <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">
+            Welcome Back
+        </h1>
+
+        <p class="text-gray-500 mt-2">
+            Sign in to continue
+        </p>
+    </div>
+
+    <form th:action="@{/login}" method="post">
+
+        <!-- Username -->
+        <div class="mb-5">
+            <label class="block text-gray-700 font-medium mb-2">
+                Username
+            </label>
+
+            <input
+                    type="text"
+                    name="username"
+                    placeholder="Enter your username"
+                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
+                    required>
+        </div>
+
+        <!-- Password -->
+        <div class="mb-5">
+            <label class="block text-gray-700 font-medium mb-2">
+                Password
+            </label>
+
+            <input
+                    type="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
+                    required>
+        </div>
+
+        <!-- Remember Me -->
+        <div class="flex items-center justify-between mb-6">
+
+            <label class="flex items-center">
+                <input type="checkbox" class="mr-2">
+                Remember Me
+            </label>
+
+            <a href="#" class="text-blue-600 hover:underline">
+                Forgot Password?
+            </a>
+
+        </div>
+
+        <!-- Login Button -->
+        <button
+                type="submit"
+                class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 rounded-lg font-semibold hover:opacity-90 transition">
+            Login
+        </button>
+
+    </form>
+
+    <div class="text-center mt-6 text-gray-500">
+        Don't have an account?
+        <a href="/signup" class="text-blue-600 font-semibold hover:underline">
+            Sign Up
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>
