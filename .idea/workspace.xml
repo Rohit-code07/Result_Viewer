@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="6a439b13-81c5-46be-93b8-63dc3e05c809" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Backend/RV/src/main/java/com/resultViewer/RV/DTO/resultDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/RV/src/main/java/com/resultViewer/RV/Repositry/UserRepo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/RV/src/main/java/com/resultViewer/RV/Service/UserLoginService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/RV/src/main/java/com/resultViewer/RV/Service/UserSignUpService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/RV/src/main/java/com/resultViewer/RV/controller/Result.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/RV/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/RV/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/RV/src/main/java/com/resultViewer/RV/DTO/UserSignUp.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/RV/src/main/java/com/resultViewer/RV/DTO/UserSignUp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/RV/src/main/java/com/resultViewer/RV/DTO/userLogin.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/RV/src/main/java/com/resultViewer/RV/DTO/UserLogin.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/RV/src/main/java/com/resultViewer/RV/Entity/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/RV/src/main/java/com/resultViewer/RV/Entity/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/RV/src/main/java/com/resultViewer/RV/Entity/result.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/RV/src/main/java/com/resultViewer/RV/Entity/result.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/RV/src/main/java/com/resultViewer/RV/Repositry/resultRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/RV/src/main/java/com/resultViewer/RV/Repositry/resultRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/RV/src/main/java/com/resultViewer/RV/Service/resultservice.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/RV/src/main/java/com/resultViewer/RV/Service/resultservice.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/RV/src/main/java/com/resultViewer/RV/controller/Authcontroller.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/RV/src/main/java/com/resultViewer/RV/controller/Authcontroller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/RV/src/main/resources/templates/adminloginpage.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/RV/src/main/resources/templates/loginpage.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/RV/src/main/resources/templates/resultViewer.html" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="36" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="HTML File" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/Backend/RV" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Rohit-code07&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Rohit-code07/Result_Viewer.git&quot;,
+    &quot;accountId&quot;: &quot;68efa533-b217-47e9-8e99-20b542322e6e&quot;
+  }
+}</component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5,
+  &quot;fromUser&quot;: false
+}</component>
+  <component name="ProjectId" id="3GLzYXJSdTg2HT2GlTPGPpJzflZ" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "Spring Boot.RvApplication.executor": "Run",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/rohit/OneDrive/Desktop/Projects/RV",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
+  }
+}]]></component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6a439b13-81c5-46be-93b8-63dc3e05c809" name="Changes" comment="" />
+      <created>1783765684646</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1783765684646</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-core" />
+    <option featureType="dependencySupport" implementationName="java:org.springframework.security:spring-security-core" />
+    <option featureType="dependencySupport" implementationName="executable:docker" />
+    <option featureType="dependencySupport" implementationName="java:jakarta.persistence:jakarta.persistence-api" />
+    <option featureType="dependencySupport" implementationName="executable:kubectl" />
+    <option featureType="dependencySupport" implementationName="java:org.springframework.data:spring-data-commons" />
+    <option featureType="dependencySupport" implementationName="java:org.thymeleaf:thymeleaf" />
+    <option featureType="dependencySupport" implementationName="java:org.springframework.boot:spring-boot" />
+    <option featureType="dependencySupport" implementationName="java:org.springframework:spring-webmvc" />
+    <option featureType="dependencySupport" implementationName="java:jakarta.xml.ws:jakarta.xml.ws-api" />
+    <option featureType="dependencySupport" implementationName="java:org.projectlombok:lombok" />
+  </component>
+</project>

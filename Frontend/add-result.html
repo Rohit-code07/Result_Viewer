@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Result - Result Viewer</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(59, 130, 246, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased">
+
+  <!-- Sticky Navbar -->
+  <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-blue-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center space-x-3">
+          <div class="flex-shrink-0 flex items-center">
+            <span class="p-2 bg-blue-600 rounded-lg text-white mr-2 shadow-md shadow-blue-200">
+              <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+            </span>
+            <span class="text-xl font-bold text-blue-900 tracking-tight">Result Viewer</span>
+          </div>
+          <!-- Desktop Menu -->
+          <div class="hidden md:flex space-x-1 pl-8">
+            <a href="admin-dashboard.html" class="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-all duration-200">
+              <i data-lucide="layout-dashboard" class="w-4 h-4 mr-1"></i> Dashboard
+            </a>
+            <a href="add-result.html" class="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-medium bg-blue-50 text-blue-600 transition-all duration-200">
+              <i data-lucide="plus-circle" class="w-4 h-4 mr-1"></i> Add Result
+            </a>
+            <a href="students.html" class="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-all duration-200">
+              <i data-lucide="users" class="w-4 h-4 mr-1"></i> Students
+            </a>
+            <a href="admin-dashboard.html#recent-results-section" class="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-all duration-200">
+              <i data-lucide="file-spreadsheet" class="w-4 h-4 mr-1"></i> Results
+            </a>
+            <a href="profile.html" class="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-all duration-200">
+              <i data-lucide="user" class="w-4 h-4 mr-1"></i> Profile
+            </a>
+          </div>
+        </div>
+
+        <div class="hidden md:flex items-center space-x-4">
+          <div class="flex items-center space-x-2 border-r border-slate-100 pr-4">
+            <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-semibold text-sm">
+              AD
+            </div>
+            <span class="text-sm font-semibold text-slate-700">Administrator</span>
+          </div>
+          <button onclick="handleLogout()" class="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 hover:text-red-700 transition-all duration-200">
+            <i data-lucide="log-out" class="w-4 h-4 mr-1"></i> Logout
+          </button>
+        </div>
+
+        <!-- Mobile menu button -->
+        <div class="flex items-center md:hidden">
+          <button id="mobile-menu-btn" class="inline-flex items-center justify-center p-2 rounded-md text-slate-500 hover:text-blue-600 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
+            <i data-lucide="menu" id="hamburger-icon" class="w-6 h-6"></i>
+            <i data-lucide="x" id="close-icon" class="w-6 h-6 hidden"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Nav Menu -->
+    <div class="hidden md:hidden" id="mobile-menu">
+      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-slate-100 shadow-lg">
+        <a href="admin-dashboard.html" class="flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600">
+          <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="add-result.html" class="flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium bg-blue-50 text-blue-600">
+          <i data-lucide="plus-circle" class="w-5 h-5"></i>
+          <span>Add Result</span>
+        </a>
+        <a href="students.html" class="flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600">
+          <i data-lucide="users" class="w-5 h-5"></i>
+          <span>Students</span>
+        </a>
+        <a href="admin-dashboard.html#recent-results-section" class="flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600">
+          <i data-lucide="file-spreadsheet" class="w-5 h-5"></i>
+          <span>Results</span>
+        </a>
+        <a href="profile.html" class="flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600">
+          <i data-lucide="user" class="w-5 h-5"></i>
+          <span>Profile</span>
+        </a>
+        <div class="border-t border-slate-100 my-2 pt-2">
+          <button onclick="handleLogout()" class="w-full flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-red-50 hover:text-red-700">
+            <i data-lucide="log-out" class="w-5 h-5"></i>
+            <span>Logout</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-grow max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 id="page-title" class="text-3xl font-extrabold text-blue-900 tracking-tight">Add Student Result</h1>
+      <p id="page-subtitle" class="text-slate-500 mt-1">Publish marks, calculate grade points, and save directly to backend API.</p>
+    </div>
+
+    <!-- Form Container -->
+    <div class="glass-card rounded-2xl p-6 md:p-8 shadow-sm border border-blue-50/50">
+      <form id="result-form" class="space-y-6">
+        
+        <!-- Section 1: Student Information -->
+        <div>
+          <h2 class="text-lg font-bold text-slate-800 border-b border-slate-100 pb-2 mb-4 flex items-center">
+            <i data-lucide="user" class="w-5 h-5 mr-2 text-blue-600"></i> Student Details
+          </h2>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- Select Student / Roll Number -->
+            <div class="relative">
+              <label for="student-select" class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Select Student</label>
+              <select id="student-select" required class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all bg-white">
+                <option value="" disabled selected>Choose registered student...</option>
+                <!-- Filled dynamically -->
+              </select>
+            </div>
+
+            <!-- Roll Number (Readonly after select) -->
+            <div>
+              <label for="roll-number" class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Roll Number</label>
+              <input type="text" id="roll-number" readonly placeholder="Will auto-populate..." class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-slate-50 font-mono text-slate-500 cursor-not-allowed focus:outline-none">
+            </div>
+
+            <!-- Student Name (Readonly) -->
+            <div>
+              <label for="student-name" class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Student Name</label>
+              <input type="text" id="student-name" readonly placeholder="Will auto-populate..." class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-slate-50 text-slate-500 cursor-not-allowed focus:outline-none">
+            </div>
+
+            <!-- Course (Readonly) -->
+            <div>
+              <label for="course" class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Course</label>
+              <input type="text" id="course" readonly placeholder="Will auto-populate..." class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm bg-slate-50 text-slate-500 cursor-not-allowed focus:outline-none">
+            </div>
+
+            <!-- Semester Selection -->
+            <div>
+              <label for="semester" class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Semester</label>
+              <select id="semester" required class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all bg-white">
+                <option value="" disabled selected>Select semester...</option>
+                <option value="1">Semester 1</option>
+                <option value="2">Semester 2</option>
+                <option value="3">Semester 3</option>
+                <option value="4">Semester 4</option>
+                <option value="5">Semester 5</option>
+                <option value="6">Semester 6</option>
+              </select>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Section 2: Subject Marks Input (Subjects 1–6) -->
+        <div id="marks-section" class="hidden opacity-0 transition-opacity duration-300">
+          <h2 class="text-lg font-bold text-slate-800 border-b border-slate-100 pb-2 mb-4 flex items-center">
+            <i data-lucide="book-open" class="w-5 h-5 mr-2 text-blue-600"></i> Subject Marks (Max 100)
+          </h2>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="subjects-grid">
+            <!-- Subject inputs populated dynamically based on semester/course selection -->
+          </div>
+        </div>
+
+        <!-- Section 3: Summary & Preview -->
+        <div id="summary-section" class="hidden opacity-0 transition-opacity duration-300">
+          <h2 class="text-lg font-bold text-slate-800 border-b border-slate-100 pb-2 mb-4 flex items-center">
+            <i data-lucide="bar-chart-2" class="w-5 h-5 mr-2 text-blue-600"></i> Calculations Summary
+          </h2>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 bg-blue-50/50 p-6 rounded-2xl border border-blue-100">
+            <!-- SGPA -->
+            <div>
+              <label for="sgpa" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Calculated SGPA</label>
+              <div class="flex items-center">
+                <input type="number" id="sgpa" step="0.01" readonly class="text-2xl font-bold text-blue-900 bg-transparent border-none w-24 focus:outline-none pointer-events-none" value="0.00">
+                <span class="text-xs text-slate-400">/ 10.0</span>
+              </div>
+            </div>
+
+            <!-- CGPA (Auto calculated) -->
+            <div>
+              <label for="cgpa" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Updated CGPA</label>
+              <div class="flex items-center">
+                <input type="number" id="cgpa" step="0.01" readonly class="text-2xl font-bold text-indigo-900 bg-transparent border-none w-24 focus:outline-none pointer-events-none" value="0.00">
+                <span class="text-xs text-slate-400">/ 10.0</span>
+              </div>
+            </div>
+
+            <!-- Status -->
+            <div>
+              <label for="status" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Status</label>
+              <div id="status-badge" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold border bg-slate-100 text-slate-700 mt-1">
+                Pending Marks
+              </div>
+              <input type="hidden" id="status" value="Fail">
+            </div>
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex justify-end space-x-3 pt-6 border-t border-slate-100">
+          <button type="button" id="reset-btn" class="px-5 py-2.5 bg-slate-100 text-slate-600 rounded-xl font-semibold hover:bg-slate-200 transition-colors">
+            Reset
+          </button>
+          <button type="submit" class="px-6 py-2.5 bg-blue-600 text-white rounded-xl font-semibold shadow-lg shadow-blue-200 hover:bg-blue-700 hover:shadow-blue-300 transition-all flex items-center">
+            <i data-lucide="save" class="w-4 h-4 mr-2"></i> Save Result
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+  </main>
+
+  <!-- Sticky Footer -->
+  <footer class="bg-white border-t border-slate-100 py-6 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-400">
+      &copy; 2026 Result Viewer System. Built with Tailwind CSS and Vanilla JS.
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
+
+  <!-- DB scripts -->
+  <script src="js/api.js"></script>
+  <script>
+    lucide.createIcons();
+
+    // Custom toasts from API fallbacks
+    window.addEventListener('api-toast', (e) => {
+      showToast(e.detail.message, e.detail.type);
+    });
+
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const hamburgerIcon = document.getElementById('hamburger-icon');
+    const closeIcon = document.getElementById('close-icon');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      const isHidden = mobileMenu.classList.contains('hidden');
+      if (isHidden) {
+        mobileMenu.classList.remove('hidden');
+        hamburgerIcon.classList.add('hidden');
+        closeIcon.classList.remove('hidden');
+      } else {
+        mobileMenu.classList.add('hidden');
+        hamburgerIcon.classList.remove('hidden');
+        closeIcon.classList.add('hidden');
+      }
+    });
+
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      let classes = 'bg-emerald-50 border-emerald-100 text-emerald-800';
+      let icon = 'check-circle';
+      
+      if (type === 'error') {
+        classes = 'bg-red-50 border-red-100 text-red-800';
+        icon = 'alert-circle';
+      } else if (type === 'warning') {
+        classes = 'bg-amber-50 border-amber-100 text-amber-800';
+        icon = 'alert-triangle';
+      }
+      
+      toast.className = `flex items-center space-x-2 px-4 py-3 rounded-xl shadow-lg border transition-all duration-300 translate-y-2 opacity-0 text-sm font-medium ${classes}`;
+      toast.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4 flex-shrink-0"></i><span>${message}</span>`;
+      
+      const container = document.getElementById('toast-container');
+      container.appendChild(toast);
+      lucide.createIcons();
+      
+      setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 50);
+      setTimeout(() => {
+        toast.classList.add('translate-y-2', 'opacity-0');
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    function handleLogout() {
+      clearSession();
+    }
+
+    // STATE VARIABLES
+    let allStudents = [];
+    let isEditMode = false;
+    let editRoll = '';
+    let editSem = '';
+
+    // Page Elements
+    const studentSelect = document.getElementById('student-select');
+    const rollInput = document.getElementById('roll-number');
+    const nameInput = document.getElementById('student-name');
+    const courseInput = document.getElementById('course');
+    const semesterSelect = document.getElementById('semester');
+    const marksSection = document.getElementById('marks-section');
+    const subjectsGrid = document.getElementById('subjects-grid');
+    const summarySection = document.getElementById('summary-section');
+    const sgpaInput = document.getElementById('sgpa');
+    const cgpaInput = document.getElementById('cgpa');
+    const statusInput = document.getElementById('status');
+    const statusBadge = document.getElementById('status-badge');
+    const form = document.getElementById('result-form');
+
+    // On Load: fetch students list to populate dropdown
+    async function initPage() {
+      try {
+        allStudents = await fetchStudents();
+        populateStudentSelect();
+
+        // Check if editing via Query Params
+        const params = new URLSearchParams(window.location.search);
+        editRoll = params.get('edit');
+        editSem = params.get('sem');
+
+        if (editRoll && editSem) {
+          isEditMode = true;
+          document.getElementById('page-title').innerText = 'Edit Student Result';
+          document.getElementById('page-subtitle').innerText = `Modifying marks of Student ${editRoll} for Semester ${editSem}`;
+          
+          // Disable student selection during edit mode to preserve keys
+          studentSelect.disabled = true;
+          semesterSelect.disabled = true;
+
+          // Fill values
+          const activeStudent = allStudents.find(s => s.rollNumber.toUpperCase() === editRoll.toUpperCase());
+          if (activeStudent) {
+            studentSelect.value = activeStudent.rollNumber;
+            updateStudentFields(activeStudent);
+            semesterSelect.value = editSem;
+            
+            // Render subjects inputs
+            renderSubjectsInputs(activeStudent.course, editSem);
+            
+            // Populate marks
+            const semResult = activeStudent.results[editSem];
+            if (semResult && semResult.subjects) {
+              semResult.subjects.forEach((sub, i) => {
+                const markInput = document.getElementById(`mark-sub-${i}`);
+                if (markInput) {
+                  markInput.value = sub.marks;
+                }
+              });
+              calculateLiveStats();
+            }
+          }
+        }
+      } catch (err) {
+        showToast('Error initializing page data.', 'error');
+      }
+    }
+
+    function populateStudentSelect() {
+      allStudents.forEach(student => {
+        const opt = document.createElement('option');
+        opt.value = student.rollNumber;
+        opt.innerText = `${student.name} (${student.rollNumber})`;
+        studentSelect.appendChild(opt);
+      });
+    }
+
+    // Change handlers
+    studentSelect.addEventListener('change', (e) => {
+      const selectedRoll = e.target.value;
+      const student = allStudents.find(s => s.rollNumber === selectedRoll);
+      if (student) {
+        updateStudentFields(student);
+        if (semesterSelect.value) {
+          renderSubjectsInputs(student.course, semesterSelect.value);
+        }
+      }
+    });
+
+    semesterSelect.addEventListener('change', (e) => {
+      const sem = e.target.value;
+      const selectedRoll = studentSelect.value;
+      if (selectedRoll) {
+        const student = allStudents.find(s => s.rollNumber === selectedRoll);
+        if (student) {
+          renderSubjectsInputs(student.course, sem);
+        }
+      }
+    });
+
+    function updateStudentFields(student) {
+      rollInput.value = student.rollNumber;
+      nameInput.value = student.name;
+      courseInput.value = student.course;
+    }
+
+    function renderSubjectsInputs(course, sem) {
+      const subjects = getSubjectsForSemester(course, sem);
+      subjectsGrid.innerHTML = '';
+      
+      subjects.forEach((sub, i) => {
+        const container = document.createElement('div');
+        container.innerHTML = `
+          <label for="mark-sub-${i}" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+            ${sub.code} - ${sub.name}
+          </label>
+          <input type="number" id="mark-sub-${i}" min="0" max="100" required placeholder="Enter marks (0-100)" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all font-medium">
+        `;
+        subjectsGrid.appendChild(container);
+
+        // Add live calculation change listeners
+        const input = container.querySelector('input');
+        input.addEventListener('input', calculateLiveStats);
+      });
+
+      // Reveal sections with fade animations
+      marksSection.classList.remove('hidden');
+      summarySection.classList.remove('hidden');
+      setTimeout(() => {
+        marksSection.classList.remove('opacity-0');
+        summarySection.classList.remove('opacity-0');
+      }, 50);
+    }
+
+    // Live marks SGPA/CGPA updates
+    function calculateLiveStats() {
+      const selectedRoll = studentSelect.value;
+      const student = allStudents.find(s => s.rollNumber === selectedRoll);
+      const sem = semesterSelect.value;
+      if (!student || !sem) return;
+
+      let totalMarks = 0;
+      let isFailing = false;
+      const inputs = subjectsGrid.querySelectorAll('input[type="number"]');
+      let filledCount = 0;
+
+      inputs.forEach(input => {
+        const marks = parseInt(input.value);
+        if (!isNaN(marks)) {
+          totalMarks += marks;
+          filledCount++;
+          // Marks under 50 triggers failure grade
+          if (marks < 50) {
+            isFailing = true;
+          }
+        }
+      });
+
+      if (filledCount < 6) {
+        sgpaInput.value = "0.00";
+        statusBadge.className = "inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold border bg-slate-100 text-slate-700 mt-1";
+        statusBadge.innerHTML = `<i data-lucide="clock" class="w-3.5 h-3.5 mr-1 text-slate-500 animate-spin"></i> Pending Marks (${filledCount}/6)`;
+        lucide.createIcons();
+        return;
+      }
+
+      // Compute SGPA (simple average out of 10)
+      const avg = totalMarks / 6;
+      const sgpa = parseFloat((avg / 10).toFixed(2));
+      sgpaInput.value = sgpa.toFixed(2);
+
+      // Compute status
+      const status = (isFailing || sgpa < 5.0) ? 'Fail' : 'Pass';
+      statusInput.value = status;
+      
+      if (status === 'Pass') {
+        statusBadge.className = 'inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold border bg-emerald-50 border-emerald-100 text-emerald-800 mt-1';
+        statusBadge.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5 mr-1 text-emerald-600"></i> Pass';
+      } else {
+        statusBadge.className = 'inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold border bg-red-50 border-red-100 text-red-800 mt-1';
+        statusBadge.innerHTML = '<i data-lucide="alert-circle" class="w-3.5 h-3.5 mr-1 text-red-600"></i> Fail';
+      }
+
+      // Compute CGPA (Weighted with new SGPA)
+      let sgpaSum = 0;
+      let count = 0;
+      
+      // Accumulate existing semesters
+      if (student.results) {
+        Object.entries(student.results).forEach(([sKey, res]) => {
+          if (sKey !== sem.toString()) { // skip current if editing
+            sgpaSum += res.sgpa;
+            count++;
+          }
+        });
+      }
+      
+      sgpaSum += sgpa;
+      count++;
+      
+      const cgpa = parseFloat((sgpaSum / count).toFixed(2));
+      cgpaInput.value = cgpa.toFixed(2);
+
+      lucide.createIcons();
+    }
+
+    // Submit form
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const roll = studentSelect.value;
+      const sem = semesterSelect.value;
+      
+      const inputs = subjectsGrid.querySelectorAll('input[type="number"]');
+      const marksArray = [];
+      
+      inputs.forEach(input => {
+        marksArray.push(parseInt(input.value) || 0);
+      });
+
+      // Double check range validation
+      if (marksArray.some(m => m < 0 || m > 100)) {
+        showToast('All marks must be between 0 and 100.', 'error');
+        return;
+      }
+
+      try {
+        const response = await saveSemesterResult(roll, sem, marksArray);
+        if (response.success) {
+          showToast(`Semester result saved successfully for student: ${roll}`, 'success');
+          // Redirect back to Admin Dashboard
+          setTimeout(() => {
+            window.location.href = 'admin-dashboard.html';
+          }, 1500);
+        } else {
+          showToast(response.message || 'Failed to save result.', 'error');
+        }
+      } catch (err) {
+        showToast('Network error while saving result.', 'error');
+      }
+    });
+
+    // Reset button
+    document.getElementById('reset-btn').addEventListener('click', () => {
+      form.reset();
+      if (!isEditMode) {
+        marksSection.classList.add('opacity-0');
+        summarySection.classList.add('opacity-0');
+        setTimeout(() => {
+          marksSection.classList.add('hidden');
+          summarySection.classList.add('hidden');
+        }, 300);
+      }
+    });
+
+    // Start initialization
+    window.addEventListener('DOMContentLoaded', initPage);
+  </script>
+</body>
+</html>

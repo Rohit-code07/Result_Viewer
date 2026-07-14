@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Result Viewer</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(59, 130, 246, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased">
+
+  <!-- Sticky Navbar -->
+  <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-blue-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center space-x-3">
+          <div class="flex-shrink-0 flex items-center">
+            <span class="p-2 bg-blue-600 rounded-lg text-white mr-2 shadow-md shadow-blue-200">
+              <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+            </span>
+            <span class="text-xl font-bold text-blue-900 tracking-tight">Result Viewer</span>
+          </div>
+          <!-- Desktop Navigation Menu -->
+          <div class="hidden md:flex space-x-1 pl-8">
+            <a href="admin-dashboard.html" class="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-medium bg-blue-50 text-blue-600 transition-all duration-200">
+              <i data-lucide="layout-dashboard" class="w-4 h-4 mr-1"></i> Dashboard
+            </a>
+            <a href="add-result.html" class="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-all duration-200">
+              <i data-lucide="plus-circle" class="w-4 h-4 mr-1"></i> Add Result
+            </a>
+            <a href="students.html" class="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-all duration-200">
+              <i data-lucide="users" class="w-4 h-4 mr-1"></i> Students
+            </a>
+            <a href="#recent-results-section" class="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-all duration-200">
+              <i data-lucide="file-spreadsheet" class="w-4 h-4 mr-1"></i> Results
+            </a>
+            <a href="profile.html" class="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-all duration-200">
+              <i data-lucide="user" class="w-4 h-4 mr-1"></i> Profile
+            </a>
+          </div>
+        </div>
+        
+        <!-- Right side actions: User session & Logout -->
+        <div class="hidden md:flex items-center space-x-4">
+          <div class="flex items-center space-x-2 border-r border-slate-100 pr-4">
+            <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-semibold text-sm">
+              AD
+            </div>
+            <span class="text-sm font-semibold text-slate-700">Administrator</span>
+          </div>
+          <button onclick="handleLogout()" class="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 hover:text-red-700 transition-all duration-200">
+            <i data-lucide="log-out" class="w-4 h-4 mr-1"></i> Logout
+          </button>
+        </div>
+
+        <!-- Mobile menu button -->
+        <div class="flex items-center md:hidden">
+          <button id="mobile-menu-btn" class="inline-flex items-center justify-center p-2 rounded-md text-slate-500 hover:text-blue-600 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
+            <span class="sr-only">Open main menu</span>
+            <i data-lucide="menu" id="hamburger-icon" class="w-6 h-6"></i>
+            <i data-lucide="x" id="close-icon" class="w-6 h-6 hidden"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Nav Menu, show/hide based on menu state. -->
+    <div class="hidden md:hidden" id="mobile-menu">
+      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-slate-100 shadow-lg">
+        <a href="admin-dashboard.html" class="flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium bg-blue-50 text-blue-600">
+          <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="add-result.html" class="flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600">
+          <i data-lucide="plus-circle" class="w-5 h-5"></i>
+          <span>Add Result</span>
+        </a>
+        <a href="students.html" class="flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600">
+          <i data-lucide="users" class="w-5 h-5"></i>
+          <span>Students</span>
+        </a>
+        <a href="#recent-results-section" onclick="toggleMobileMenu()" class="flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600">
+          <i data-lucide="file-spreadsheet" class="w-5 h-5"></i>
+          <span>Results</span>
+        </a>
+        <a href="profile.html" class="flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600">
+          <i data-lucide="user" class="w-5 h-5"></i>
+          <span>Profile</span>
+        </a>
+        <div class="border-t border-slate-100 my-2 pt-2">
+          <div class="px-3 py-2 flex items-center space-x-3 mb-2">
+            <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-semibold">
+              AD
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-slate-800">Administrator</div>
+              <div class="text-xs text-slate-500">admin@aeroshield.edu</div>
+            </div>
+          </div>
+          <button onclick="handleLogout()" class="w-full flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-red-50 hover:text-red-700">
+            <i data-lucide="log-out" class="w-5 h-5"></i>
+            <span>Logout</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Hero Section / Header -->
+    <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div>
+        <h1 class="text-3xl font-extrabold text-blue-900 tracking-tight">Admin Dashboard</h1>
+        <p class="text-slate-500 mt-1">Monitor student results, track academic performance, and manage grade sheets.</p>
+      </div>
+      <div>
+        <a href="add-result.html" class="inline-flex items-center justify-center px-5 py-2.5 bg-blue-600 text-white rounded-xl font-medium shadow-lg shadow-blue-200 hover:bg-blue-700 hover:shadow-blue-300 -translate-y-0.5 active:translate-y-0 transition-all duration-200">
+          <i data-lucide="plus" class="w-4 h-4 mr-2"></i> Add Semester Result
+        </a>
+      </div>
+    </div>
+
+    <!-- Dashboard KPI Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+      
+      <!-- Card 1: Total Students -->
+      <div class="glass-card rounded-2xl p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Students</p>
+            <h3 class="text-3xl font-bold text-slate-800 mt-2" id="kpi-total-students">0</h3>
+            <p class="text-xs text-green-600 mt-2 flex items-center">
+              <i data-lucide="arrow-up" class="w-3.5 h-3.5 mr-1"></i> Active in database
+            </p>
+          </div>
+          <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
+            <i data-lucide="users" class="w-6 h-6"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Total Results -->
+      <div class="glass-card rounded-2xl p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Results</p>
+            <h3 class="text-3xl font-bold text-slate-800 mt-2" id="kpi-total-results">0</h3>
+            <p class="text-xs text-slate-500 mt-2">
+              Semester grade sheets published
+            </p>
+          </div>
+          <div class="p-3 bg-indigo-50 text-indigo-600 rounded-xl">
+            <i data-lucide="file-spreadsheet" class="w-6 h-6"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Pass Percentage -->
+      <div class="glass-card rounded-2xl p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Pass Percentage</p>
+            <h3 class="text-3xl font-bold text-slate-800 mt-2" id="kpi-pass-rate">0%</h3>
+            <div class="w-full bg-slate-100 rounded-full h-1.5 mt-3 overflow-hidden">
+              <div id="kpi-pass-progress" class="bg-emerald-500 h-1.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
+            </div>
+          </div>
+          <div class="p-3 bg-emerald-50 text-emerald-600 rounded-xl">
+            <i data-lucide="check-circle" class="w-6 h-6"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: Recent Results -->
+      <div class="glass-card rounded-2xl p-6 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Recent Results</p>
+            <h3 class="text-3xl font-bold text-slate-800 mt-2" id="kpi-recent-count">0</h3>
+            <p class="text-xs text-blue-600 mt-2 flex items-center">
+              <i data-lucide="clock" class="w-3.5 h-3.5 mr-1"></i> Standard View Limit
+            </p>
+          </div>
+          <div class="p-3 bg-violet-50 text-violet-600 rounded-xl">
+            <i data-lucide="trending-up" class="w-6 h-6"></i>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Recent Results Table Section -->
+    <div id="recent-results-section" class="glass-card rounded-2xl shadow-sm overflow-hidden border border-blue-50/50">
+      
+      <!-- Table Header & Controls -->
+      <div class="px-6 py-5 border-b border-slate-100 bg-white flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <h2 class="text-lg font-bold text-blue-900">Recent Results Record</h2>
+          <p class="text-xs text-slate-400 mt-0.5">List of recently added or modified academic grades.</p>
+        </div>
+        <!-- Search bar -->
+        <div class="relative max-w-sm w-full">
+          <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+            <i data-lucide="search" class="w-4 h-4"></i>
+          </span>
+          <input type="text" id="search-input" placeholder="Search by name or roll number..." class="w-full pl-9 pr-4 py-2 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
+        </div>
+      </div>
+
+      <!-- Table Body with Horizontal Scroll -->
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-50/70 border-b border-slate-100 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              <th class="px-6 py-4">Student Name</th>
+              <th class="px-6 py-4">Roll Number</th>
+              <th class="px-6 py-4">Course</th>
+              <th class="px-6 py-4">Semester</th>
+              <th class="px-6 py-4 text-center">CGPA</th>
+              <th class="px-6 py-4 text-center">Status</th>
+              <th class="px-6 py-4 text-right">Action</th>
+            </tr>
+          </thead>
+          <tbody id="results-table-body" class="divide-y divide-slate-100 text-sm text-slate-700 bg-white">
+            <!-- Rendered dynamically -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty State -->
+      <div id="empty-state" class="hidden flex flex-col items-center justify-center py-12 px-4 text-center">
+        <div class="p-4 bg-slate-50 rounded-full text-slate-400 mb-3">
+          <i data-lucide="search-code" class="w-8 h-8"></i>
+        </div>
+        <h3 class="text-base font-semibold text-slate-700">No results found</h3>
+        <p class="text-xs text-slate-400 max-w-xs mt-1">Try modifying your search or check if the database is seeded.</p>
+      </div>
+
+      <!-- Table Footer / Stats summary -->
+      <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/30 flex justify-between items-center text-xs text-slate-500">
+        <span id="entries-count">Showing 0 results</span>
+        <span>Database Powered</span>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Sticky Footer -->
+  <footer class="bg-white border-t border-slate-100 py-6 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-400">
+      &copy; 2026 Result Viewer System. Built with Tailwind CSS and Vanilla JS.
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
+
+  <!-- DB scripts -->
+  <script src="js/api.js"></script>
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Listen for custom API toasts (e.g. backend connectivity warning)
+    window.addEventListener('api-toast', (e) => {
+      showToast(e.detail.message, e.detail.type);
+    });
+
+    // Mobile menu toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const hamburgerIcon = document.getElementById('hamburger-icon');
+    const closeIcon = document.getElementById('close-icon');
+
+    mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+
+    // Set Mock session if not already in admin mode
+    setSessionUser('admin');
+
+    function toggleMobileMenu() {
+      const isHidden = mobileMenu.classList.contains('hidden');
+      if (isHidden) {
+        mobileMenu.classList.remove('hidden');
+        hamburgerIcon.classList.add('hidden');
+        closeIcon.classList.remove('hidden');
+      } else {
+        mobileMenu.classList.add('hidden');
+        hamburgerIcon.classList.remove('hidden');
+        closeIcon.classList.add('hidden');
+      }
+    }
+
+    // UI Toast Notification helper
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      
+      let classes = 'bg-emerald-50 border-emerald-100 text-emerald-800';
+      let icon = 'check-circle';
+      
+      if (type === 'error') {
+        classes = 'bg-red-50 border-red-100 text-red-800';
+        icon = 'alert-circle';
+      } else if (type === 'warning') {
+        classes = 'bg-amber-50 border-amber-100 text-amber-800';
+        icon = 'alert-triangle';
+      }
+      
+      toast.className = `flex items-center space-x-2 px-4 py-3 rounded-xl shadow-lg border transition-all duration-300 translate-y-2 opacity-0 text-sm font-medium ${classes}`;
+      toast.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4 flex-shrink-0"></i><span>${message}</span>`;
+      
+      const container = document.getElementById('toast-container');
+      container.appendChild(toast);
+      lucide.createIcons();
+      
+      // Trigger slide-up
+      setTimeout(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      }, 50);
+
+      // Remove after 4s
+      setTimeout(() => {
+        toast.classList.add('translate-y-2', 'opacity-0');
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    // Logout handling
+    function handleLogout() {
+      clearSession();
+    }
+
+    // Load and Render Stats & Table
+    let allResults = [];
+
+    async function loadDashboard() {
+      try {
+        const stats = await fetchDashboardStats();
+        
+        // Update KPI Numbers
+        document.getElementById('kpi-total-students').innerText = stats.totalStudents;
+        document.getElementById('kpi-total-results').innerText = stats.totalResults;
+        document.getElementById('kpi-pass-rate').innerText = `${stats.passPercentage}%`;
+        document.getElementById('kpi-recent-count').innerText = stats.recentResults.length;
+        
+        // Update progress bar
+        document.getElementById('kpi-pass-progress').style.width = `${stats.passPercentage}%`;
+
+        // Cache all results
+        allResults = stats.recentResults;
+        renderTable(allResults);
+      } catch (err) {
+        console.error('Failed to load dashboard:', err);
+        showToast('Error loading dashboard stats from Spring Boot API.', 'error');
+      }
+    }
+
+    function renderTable(resultsList) {
+      const tbody = document.getElementById('results-table-body');
+      const emptyState = document.getElementById('empty-state');
+      const countLabel = document.getElementById('entries-count');
+      tbody.innerHTML = '';
+
+      if (resultsList.length === 0) {
+        emptyState.classList.remove('hidden');
+        countLabel.innerText = 'Showing 0 results';
+        return;
+      }
+      
+      emptyState.classList.add('hidden');
+      countLabel.innerText = `Showing ${resultsList.length} results`;
+
+      resultsList.forEach(res => {
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-slate-50/50 transition-colors duration-150 group';
+        
+        const statusClass = res.status.toLowerCase() === 'pass' 
+          ? 'bg-emerald-50 text-emerald-700 border-emerald-100' 
+          : 'bg-red-50 text-red-700 border-red-100';
+
+        row.innerHTML = `
+          <td class="px-6 py-4 font-medium text-slate-800 whitespace-nowrap">${res.studentName}</td>
+          <td class="px-6 py-4 font-mono text-xs text-slate-500 whitespace-nowrap">${res.rollNumber}</td>
+          <td class="px-6 py-4 text-xs text-slate-600 whitespace-nowrap">${res.course}</td>
+          <td class="px-6 py-4 text-center whitespace-nowrap">Sem ${res.semester}</td>
+          <td class="px-6 py-4 text-center font-semibold text-slate-800 whitespace-nowrap">${res.cgpa.toFixed(2)}</td>
+          <td class="px-6 py-4 text-center whitespace-nowrap">
+            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border ${statusClass}">
+              ${res.status}
+            </span>
+          </td>
+          <td class="px-6 py-4 text-right whitespace-nowrap">
+            <div class="flex justify-end items-center space-x-2">
+              <a href="semester-result.html?roll=${res.rollNumber}&sem=${res.semester}" class="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="View mark sheet">
+                <i data-lucide="eye" class="w-4 h-4"></i>
+              </a>
+              <a href="add-result.html?edit=${res.rollNumber}&sem=${res.semester}" class="p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors" title="Edit result">
+                <i data-lucide="edit-3" class="w-4 h-4"></i>
+              </a>
+              <button onclick="handleDeleteResult('${res.rollNumber}', '${res.semester}', '${res.studentName}')" class="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Delete result">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+      
+      lucide.createIcons();
+    }
+
+    // Delete handling
+    async function handleDeleteResult(roll, sem, name) {
+      if (confirm(`Are you sure you want to delete the result of ${name} for Semester ${sem}?`)) {
+        try {
+          const res = await deleteSemesterResult(roll, sem);
+          if (res.success) {
+            showToast(`Semester ${sem} result for ${name} deleted successfully!`);
+            await loadDashboard();
+          } else {
+            showToast(res.message || 'Error deleting result.', 'error');
+          }
+        } catch (err) {
+          showToast('Could not reach backend server to delete result.', 'error');
+        }
+      }
+    }
+
+    // Live search filter
+    const searchInput = document.getElementById('search-input');
+    searchInput.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      if (!q) {
+        renderTable(allResults);
+        return;
+      }
+      const filtered = allResults.filter(res => 
+        res.studentName.toLowerCase().includes(q) || 
+        res.rollNumber.toLowerCase().includes(q) ||
+        res.course.toLowerCase().includes(q)
+      );
+      renderTable(filtered);
+    });
+
+    // Initial load
+    window.addEventListener('DOMContentLoaded', loadDashboard);
+  </script>
+</body>
+</html>

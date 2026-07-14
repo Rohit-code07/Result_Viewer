@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Semester Transcript - Result Viewer</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(59, 130, 246, 0.1);
+    }
+    /* Official Marksheet Print Styling */
+    @media print {
+      body {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+      }
+      nav, footer, .action-buttons, #toast-container, .breadcrumbs {
+        display: none !important;
+      }
+      main {
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+      }
+      .marksheet-container {
+        border: 2px solid #1e3a8a !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        background: white !important;
+        padding: 2.5rem !important;
+        margin-top: 1rem !important;
+        page-break-after: avoid;
+      }
+      .badge-pass {
+        border: 1px solid #065f46 !important;
+        color: #065f46 !important;
+        background-color: #ecfdf5 !important;
+      }
+      .badge-fail {
+        border: 1px solid #991b1b !important;
+        color: #991b1b !important;
+        background-color: #fef2f2 !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased">
+
+  <!-- Sticky Navbar (Hidden during printing) -->
+  <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-blue-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center space-x-3">
+          <div class="flex-shrink-0 flex items-center">
+            <span class="p-2 bg-blue-600 rounded-lg text-white mr-2 shadow-md shadow-blue-200">
+              <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+            </span>
+            <span class="text-xl font-bold text-blue-900 tracking-tight">Result Viewer</span>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-2 text-xs text-slate-500 font-medium">
+          <span>Official Grade Sheet Portal</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="flex-grow max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Action Controls (Hidden during printing) -->
+    <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 action-buttons">
+      <!-- Back Button -->
+      <div>
+        <button onclick="navigateBack()" class="inline-flex items-center text-slate-500 hover:text-blue-600 transition-colors text-sm font-semibold">
+          <i data-lucide="arrow-left" class="w-4 h-4 mr-1.5"></i> Back to Dashboard
+        </button>
+      </div>
+      <!-- Print/Save -->
+      <div class="flex items-center space-x-2">
+        <button onclick="window.print()" class="inline-flex items-center justify-center px-4 py-2 border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 rounded-xl text-sm font-semibold transition-all shadow-sm">
+          <i data-lucide="printer" class="w-4 h-4 mr-1.5 text-slate-500"></i> Print Result
+        </button>
+        <button onclick="window.print()" class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold shadow-lg shadow-blue-200 hover:shadow-blue-300 transition-all">
+          <i data-lucide="download" class="w-4 h-4 mr-1.5"></i> Save PDF
+        </button>
+      </div>
+    </div>
+
+    <!-- Official Marksheet Card -->
+    <div class="glass-card rounded-3xl p-8 md:p-10 shadow-lg border border-blue-50/50 bg-white relative overflow-hidden marksheet-container">
+      
+      <!-- Certificate Border Border Accents -->
+      <div class="absolute inset-0 border-[6px] border-blue-900/5 pointer-events-none rounded-3xl m-2"></div>
+      
+      <!-- Watermark Stamp -->
+      <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03]">
+        <i data-lucide="graduation-cap" class="w-[300px] h-[300px] text-blue-900"></i>
+      </div>
+
+      <div class="relative z-10 space-y-8">
+        
+        <!-- Header: University Details -->
+        <div class="text-center pb-6 border-b-2 border-double border-slate-200">
+          <div class="flex items-center justify-center mb-3">
+            <span class="p-2.5 bg-blue-900 rounded-xl text-white mr-3 shadow-md shadow-blue-200">
+              <i data-lucide="graduation-cap" class="w-8 h-8"></i>
+            </span>
+            <span class="text-2xl font-black text-blue-900 tracking-wider uppercase">AeroShield Institute of Technology</span>
+          </div>
+          <p class="text-xs text-slate-400 font-medium tracking-widest uppercase">Affiliated Academic Evaluation Wing</p>
+          <h2 class="text-base font-bold text-slate-700 tracking-wide uppercase mt-2">Statement of Semester Grades</h2>
+        </div>
+
+        <!-- Student Details Block -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-4 text-sm bg-slate-50/60 p-6 rounded-2xl border border-slate-100/50">
+          <div>
+            <div class="flex py-1.5 border-b border-slate-100">
+              <span class="w-32 text-xs font-semibold text-slate-400 uppercase tracking-wider">Candidate Name</span>
+              <span class="font-bold text-slate-800" id="student-name">-</span>
+            </div>
+            <div class="flex py-1.5 border-b border-slate-100 mt-1">
+              <span class="w-32 text-xs font-semibold text-slate-400 uppercase tracking-wider">Roll Number</span>
+              <span class="font-mono font-bold text-slate-800 uppercase" id="roll-number">-</span>
+            </div>
+          </div>
+          <div>
+            <div class="flex py-1.5 border-b border-slate-100">
+              <span class="w-32 text-xs font-semibold text-slate-400 uppercase tracking-wider">Program Course</span>
+              <span class="font-bold text-slate-700" id="course-name">-</span>
+            </div>
+            <div class="flex py-1.5 border-b border-slate-100 mt-1">
+              <span class="w-32 text-xs font-semibold text-slate-400 uppercase tracking-wider">Academic Term</span>
+              <span class="font-bold text-blue-800" id="semester-label">Semester -</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grades sheet Table -->
+        <div>
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-blue-900 text-white text-xs font-semibold uppercase tracking-wider">
+                <th class="px-6 py-3.5 rounded-l-xl">Subject Code</th>
+                <th class="px-6 py-3.5">Subject Description</th>
+                <th class="px-6 py-3.5 text-center">Marks Obtained</th>
+                <th class="px-6 py-3.5 text-center rounded-r-xl">Letter Grade</th>
+              </tr>
+            </thead>
+            <tbody id="marksheet-tbody" class="divide-y divide-slate-100 text-sm text-slate-700 bg-white">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Grade Summary Metric Cards -->
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 pt-4 border-t border-slate-200">
+          <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl text-center">
+            <span class="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Total Marks</span>
+            <span class="text-lg font-bold text-slate-800 mt-1 block" id="total-marks">0 / 600</span>
+          </div>
+          <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl text-center">
+            <span class="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Percentage</span>
+            <span class="text-lg font-bold text-slate-800 mt-1 block" id="percentage">0.0%</span>
+          </div>
+          <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl text-center">
+            <span class="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider">SGPA</span>
+            <span class="text-lg font-extrabold text-blue-900 mt-1 block" id="sgpa-val">0.00</span>
+          </div>
+          <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl text-center">
+            <span class="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider">CGPA</span>
+            <span class="text-lg font-extrabold text-indigo-900 mt-1 block" id="cgpa-val">0.00</span>
+          </div>
+          <div class="p-4 bg-slate-50 border border-slate-100 rounded-xl text-center col-span-2 sm:col-span-1">
+            <span class="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Result Status</span>
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold border mt-2" id="result-status">
+              -
+            </span>
+          </div>
+        </div>
+
+        <!-- Footer Seal/Signatures -->
+        <div class="pt-10 flex justify-between items-end border-t border-dashed border-slate-200">
+          <div class="text-xs text-slate-400">
+            <p>Date of Publication: July 13, 2026</p>
+            <p class="mt-1 font-mono text-[9px] uppercase">Verify Code: IT-AGY2-2026-AEROSHIELD</p>
+          </div>
+          <div class="text-center">
+            <div class="font-mono text-slate-700 italic border-b border-slate-300 pb-1 w-44 mx-auto select-none">
+              &mdash; Controller of Exams &mdash;
+            </div>
+            <p class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider mt-1.5">Authorized Signature</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Print Footer (Hidden during normal screen) -->
+  <footer class="bg-white border-t border-slate-100 py-6 mt-auto action-buttons">
+    <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-400">
+      &copy; 2026 Result Viewer System. Built with Tailwind CSS and Vanilla JS.
+    </div>
+  </footer>
+
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
+
+  <!-- API scripts -->
+  <script src="js/api.js"></script>
+  <script>
+    lucide.createIcons();
+
+    // Custom toasts from API fallbacks
+    window.addEventListener('api-toast', (e) => {
+      showToast(e.detail.message, e.detail.type);
+    });
+
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      let classes = 'bg-emerald-50 border-emerald-100 text-emerald-800';
+      let icon = 'check-circle';
+      
+      if (type === 'error') {
+        classes = 'bg-red-50 border-red-100 text-red-800';
+        icon = 'alert-circle';
+      } else if (type === 'warning') {
+        classes = 'bg-amber-50 border-amber-100 text-amber-800';
+        icon = 'alert-triangle';
+      }
+      
+      toast.className = `flex items-center space-x-2 px-4 py-3 rounded-xl shadow-lg border transition-all duration-300 translate-y-2 opacity-0 text-sm font-medium ${classes}`;
+      toast.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4 flex-shrink-0"></i><span>${message}</span>`;
+      
+      const container = document.getElementById('toast-container');
+      container.appendChild(toast);
+      lucide.createIcons();
+      
+      setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 50);
+      setTimeout(() => {
+        toast.classList.add('translate-y-2', 'opacity-0');
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    // STATE variables
+    let rollNumber = '';
+    let semester = '';
+
+    // Load Result on Page Load
+    async function loadMarksheet() {
+      const params = new URLSearchParams(window.location.search);
+      rollNumber = params.get('roll') || 'STU001';
+      semester = params.get('sem') || '1';
+
+      try {
+        const student = await fetchStudentByRoll(rollNumber);
+        if (!student) {
+          showToast(`Student data for Roll Number ${rollNumber} not found.`, 'error');
+          return;
+        }
+
+        const semResult = student.results && student.results[semester.toString()];
+        if (!semResult) {
+          showToast(`Semester ${semester} result not published for ${student.name}.`, 'error');
+          // Fill empty structure
+          populateUIEmpty(student);
+          return;
+        }
+
+        populateUI(student, semResult);
+
+      } catch (err) {
+        showToast('Error loading mark sheet.', 'error');
+      }
+    }
+
+    function populateUI(student, semResult) {
+      document.getElementById('student-name').innerText = student.name;
+      document.getElementById('roll-number').innerText = student.rollNumber;
+      document.getElementById('course-name').innerText = student.course;
+      document.getElementById('semester-label').innerText = `Semester ${semester}`;
+
+      // Populate Table
+      const tbody = document.getElementById('marksheet-tbody');
+      tbody.innerHTML = '';
+
+      let totalMarks = 0;
+      semResult.subjects.forEach(sub => {
+        totalMarks += sub.marks;
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-slate-50/50 transition-colors duration-150';
+
+        row.innerHTML = `
+          <td class="px-6 py-4 font-mono text-xs text-slate-500 font-semibold">${sub.code}</td>
+          <td class="px-6 py-4 font-medium text-slate-800">${sub.name}</td>
+          <td class="px-6 py-4 text-center font-bold text-slate-700">${sub.marks}</td>
+          <td class="px-6 py-4 text-center font-extrabold text-blue-900">${sub.grade}</td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      // Stats card
+      document.getElementById('total-marks').innerText = `${totalMarks} / 600`;
+      
+      const pct = (totalMarks / 600) * 100;
+      document.getElementById('percentage').innerText = `${pct.toFixed(1)}%`;
+      document.getElementById('sgpa-val').innerText = semResult.sgpa.toFixed(2);
+      document.getElementById('cgpa-val').innerText = student.cgpa ? student.cgpa.toFixed(2) : semResult.sgpa.toFixed(2);
+
+      // Status Badge
+      const statusBadge = document.getElementById('result-status');
+      const pass = semResult.status.toLowerCase() === 'pass';
+      statusBadge.innerText = semResult.status.toUpperCase();
+      if (pass) {
+        statusBadge.className = 'inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border mt-2 bg-emerald-50 border-emerald-100 text-emerald-800 badge-pass';
+      } else {
+        statusBadge.className = 'inline-flex items-center px-3 py-1 rounded-full text-xs font-bold border mt-2 bg-red-50 border-red-100 text-red-800 badge-fail';
+      }
+    }
+
+    function populateUIEmpty(student) {
+      document.getElementById('student-name').innerText = student.name;
+      document.getElementById('roll-number').innerText = student.rollNumber;
+      document.getElementById('course-name').innerText = student.course;
+      document.getElementById('semester-label').innerText = `Semester ${semester} (Awaiting Grading)`;
+
+      const tbody = document.getElementById('marksheet-tbody');
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="4" class="px-6 py-12 text-center text-slate-400 font-medium">
+            <i data-lucide="clock" class="w-8 h-8 mx-auto mb-2 text-slate-300"></i>
+            Grades for this semester have not been evaluated or uploaded by the administrator.
+          </td>
+        </tr>
+      `;
+      lucide.createIcons();
+    }
+
+    // Navigation back: depends on session role
+    function navigateBack() {
+      const session = getSessionUser();
+      if (session && session.role === 'admin') {
+        window.location.href = 'admin-dashboard.html';
+      } else {
+        window.location.href = `student-dashboard.html?roll=${rollNumber}`;
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', loadMarksheet);
+  </script>
+</body>
+</html>

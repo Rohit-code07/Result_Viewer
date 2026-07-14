@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Students List - Result Viewer</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(59, 130, 246, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased">
+
+  <!-- Sticky Navbar -->
+  <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-blue-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center space-x-3">
+          <div class="flex-shrink-0 flex items-center">
+            <span class="p-2 bg-blue-600 rounded-lg text-white mr-2 shadow-md shadow-blue-200">
+              <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+            </span>
+            <span class="text-xl font-bold text-blue-900 tracking-tight">Result Viewer</span>
+          </div>
+          <!-- Desktop Navigation -->
+          <div class="hidden md:flex space-x-1 pl-8">
+            <a href="admin-dashboard.html" class="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-all duration-200">
+              <i data-lucide="layout-dashboard" class="w-4 h-4 mr-1"></i> Dashboard
+            </a>
+            <a href="add-result.html" class="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-all duration-200">
+              <i data-lucide="plus-circle" class="w-4 h-4 mr-1"></i> Add Result
+            </a>
+            <a href="students.html" class="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-medium bg-blue-50 text-blue-600 transition-all duration-200">
+              <i data-lucide="users" class="w-4 h-4 mr-1"></i> Students
+            </a>
+            <a href="admin-dashboard.html#recent-results-section" class="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-all duration-200">
+              <i data-lucide="file-spreadsheet" class="w-4 h-4 mr-1"></i> Results
+            </a>
+            <a href="profile.html" class="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-all duration-200">
+              <i data-lucide="user" class="w-4 h-4 mr-1"></i> Profile
+            </a>
+          </div>
+        </div>
+
+        <!-- Desktop Right -->
+        <div class="hidden md:flex items-center space-x-4">
+          <div class="flex items-center space-x-2 border-r border-slate-100 pr-4">
+            <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-semibold text-sm">
+              AD
+            </div>
+            <span class="text-sm font-semibold text-slate-700">Administrator</span>
+          </div>
+          <button onclick="handleLogout()" class="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 hover:text-red-700 transition-all duration-200">
+            <i data-lucide="log-out" class="w-4 h-4 mr-1"></i> Logout
+          </button>
+        </div>
+
+        <!-- Mobile menu button -->
+        <div class="flex items-center md:hidden">
+          <button id="mobile-menu-btn" class="inline-flex items-center justify-center p-2 rounded-md text-slate-500 hover:text-blue-600 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
+            <i data-lucide="menu" id="hamburger-icon" class="w-6 h-6"></i>
+            <i data-lucide="x" id="close-icon" class="w-6 h-6 hidden"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Nav Menu -->
+    <div class="hidden md:hidden" id="mobile-menu">
+      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-slate-100 shadow-lg">
+        <a href="admin-dashboard.html" class="flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600">
+          <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="add-result.html" class="flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600">
+          <i data-lucide="plus-circle" class="w-5 h-5"></i>
+          <span>Add Result</span>
+        </a>
+        <a href="students.html" class="flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium bg-blue-50 text-blue-600">
+          <i data-lucide="users" class="w-5 h-5"></i>
+          <span>Students</span>
+        </a>
+        <a href="admin-dashboard.html#recent-results-section" class="flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600">
+          <i data-lucide="file-spreadsheet" class="w-5 h-5"></i>
+          <span>Results</span>
+        </a>
+        <a href="profile.html" class="flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600">
+          <i data-lucide="user" class="w-5 h-5"></i>
+          <span>Profile</span>
+        </a>
+        <div class="border-t border-slate-100 my-2 pt-2">
+          <button onclick="handleLogout()" class="w-full flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-red-50 hover:text-red-700">
+            <i data-lucide="log-out" class="w-5 h-5"></i>
+            <span>Logout</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Title & Add Button -->
+    <div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div>
+        <h1 class="text-3xl font-extrabold text-blue-900 tracking-tight">Manage Students</h1>
+        <p class="text-slate-500 mt-1">Register new profiles, view student statistics, and monitor academic records.</p>
+      </div>
+      <div>
+        <button onclick="openAddModal()" class="inline-flex items-center justify-center px-5 py-2.5 bg-blue-600 text-white rounded-xl font-medium shadow-lg shadow-blue-200 hover:bg-blue-700 hover:shadow-blue-300 -translate-y-0.5 active:translate-y-0 transition-all">
+          <i data-lucide="user-plus" class="w-4 h-4 mr-2"></i> Register Student
+        </button>
+      </div>
+    </div>
+
+    <!-- Search & Grid Control -->
+    <div class="glass-card rounded-2xl p-6 shadow-sm mb-6 border border-blue-50/50 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div class="relative max-w-md w-full">
+        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+          <i data-lucide="search" class="w-4 h-4"></i>
+        </span>
+        <input type="text" id="search-bar" placeholder="Search by name, roll, course, email..." class="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all bg-white">
+      </div>
+      <div class="text-xs text-slate-500 font-medium" id="student-count">
+        Loading students list...
+      </div>
+    </div>
+
+    <!-- Students Table Container -->
+    <div class="glass-card rounded-2xl shadow-sm overflow-hidden border border-blue-50/50">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-50/70 border-b border-slate-100 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              <th class="px-6 py-4">Student Profile</th>
+              <th class="px-6 py-4">Roll Number</th>
+              <th class="px-6 py-4">Course</th>
+              <th class="px-6 py-4 text-center">Semester</th>
+              <th class="px-6 py-4">Email</th>
+              <th class="px-6 py-4">Phone</th>
+              <th class="px-6 py-4 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="student-table-body" class="divide-y divide-slate-100 text-sm text-slate-700 bg-white">
+            <!-- Rendered dynamically -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Empty State -->
+      <div id="empty-state" class="hidden flex flex-col items-center justify-center py-16 px-4 text-center">
+        <div class="p-4 bg-slate-50 rounded-full text-slate-400 mb-3">
+          <i data-lucide="users-2" class="w-8 h-8"></i>
+        </div>
+        <h3 class="text-base font-semibold text-slate-700">No students registered</h3>
+        <p class="text-xs text-slate-400 max-w-xs mt-1">Add a new student using the "Register Student" button to begin.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Register Student Modal -->
+  <div id="student-modal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+    <!-- Overlay -->
+    <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity"></div>
+
+    <div class="flex min-h-full items-center justify-center p-4 text-center">
+      <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all w-full max-w-lg border border-slate-100 scale-95 opacity-0 duration-300 ease-out" id="modal-content">
+        
+        <!-- Modal Header -->
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+          <h3 class="text-lg font-bold text-blue-900 flex items-center">
+            <i data-lucide="user-plus" class="w-5 h-5 mr-2 text-blue-600"></i> Register New Student
+          </h3>
+          <button onclick="closeAddModal()" class="text-slate-400 hover:text-slate-600 transition-colors">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <form id="student-form">
+          <!-- Modal Body -->
+          <div class="px-6 py-4 space-y-4">
+            <!-- Name -->
+            <div>
+              <label for="name" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Student Name</label>
+              <input type="text" id="name" required placeholder="e.g. Aarav Sharma" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all bg-white">
+            </div>
+
+            <!-- Roll & Semester -->
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label for="roll" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Roll Number</label>
+                <input type="text" id="roll" required placeholder="e.g. STU006" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all bg-white font-mono uppercase">
+              </div>
+              <div>
+                <label for="sem" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Current Semester</label>
+                <select id="sem" required class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all bg-white">
+                  <option value="1">Semester 1</option>
+                  <option value="2">Semester 2</option>
+                  <option value="3">Semester 3</option>
+                  <option value="4">Semester 4</option>
+                  <option value="5">Semester 5</option>
+                  <option value="6">Semester 6</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Course -->
+            <div>
+              <label for="course" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Course / Branch</label>
+              <select id="course" required class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all bg-white">
+                <option value="B.Tech Computer Science">B.Tech Computer Science</option>
+                <option value="B.Tech Information Technology">B.Tech Information Technology</option>
+                <option value="B.Tech Electronics & Comm">B.Tech Electronics & Comm</option>
+                <option value="B.Tech Mechanical Eng">B.Tech Mechanical Eng</option>
+              </select>
+            </div>
+
+            <!-- Email & Phone -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="email" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Email ID</label>
+                <input type="email" id="email" required placeholder="name@college.edu" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all bg-white">
+              </div>
+              <div>
+                <label for="phone" class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Phone Number</label>
+                <input type="tel" id="phone" required placeholder="+91 XXXXX XXXXX" class="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all bg-white">
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Modal Footer -->
+          <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-end space-x-3">
+            <button type="button" onclick="closeAddModal()" class="px-4 py-2 bg-slate-200 text-slate-600 rounded-xl font-semibold hover:bg-slate-300 transition-colors text-sm">
+              Cancel
+            </button>
+            <button type="submit" class="px-5 py-2 bg-blue-600 text-white rounded-xl font-semibold shadow-md shadow-blue-200 hover:bg-blue-700 transition-all text-sm flex items-center">
+              <i data-lucide="check" class="w-4 h-4 mr-1.5"></i> Register
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Sticky Footer -->
+  <footer class="bg-white border-t border-slate-100 py-6 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-400">
+      &copy; 2026 Result Viewer System. Built with Tailwind CSS and Vanilla JS.
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
+
+  <!-- API scripts -->
+  <script src="js/api.js"></script>
+  <script>
+    lucide.createIcons();
+
+    // Register toast receiver
+    window.addEventListener('api-toast', (e) => {
+      showToast(e.detail.message, e.detail.type);
+    });
+
+    // Mobile nav toggle
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const hamburgerIcon = document.getElementById('hamburger-icon');
+    const closeIcon = document.getElementById('close-icon');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      const isHidden = mobileMenu.classList.contains('hidden');
+      if (isHidden) {
+        mobileMenu.classList.remove('hidden');
+        hamburgerIcon.classList.add('hidden');
+        closeIcon.classList.remove('hidden');
+      } else {
+        mobileMenu.classList.add('hidden');
+        hamburgerIcon.classList.remove('hidden');
+        closeIcon.classList.add('hidden');
+      }
+    });
+
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      let classes = 'bg-emerald-50 border-emerald-100 text-emerald-800';
+      let icon = 'check-circle';
+      
+      if (type === 'error') {
+        classes = 'bg-red-50 border-red-100 text-red-800';
+        icon = 'alert-circle';
+      } else if (type === 'warning') {
+        classes = 'bg-amber-50 border-amber-100 text-amber-800';
+        icon = 'alert-triangle';
+      }
+      
+      toast.className = `flex items-center space-x-2 px-4 py-3 rounded-xl shadow-lg border transition-all duration-300 translate-y-2 opacity-0 text-sm font-medium ${classes}`;
+      toast.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4 flex-shrink-0"></i><span>${message}</span>`;
+      
+      const container = document.getElementById('toast-container');
+      container.appendChild(toast);
+      lucide.createIcons();
+      
+      setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 50);
+      setTimeout(() => {
+        toast.classList.add('translate-y-2', 'opacity-0');
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    function handleLogout() {
+      clearSession();
+    }
+
+    // STATE CONTROLS
+    let cachedStudents = [];
+    const tableBody = document.getElementById('student-table-body');
+    const emptyState = document.getElementById('empty-state');
+    const searchBar = document.getElementById('search-bar');
+    const studentCountLabel = document.getElementById('student-count');
+
+    // Modals
+    const modal = document.getElementById('student-modal');
+    const modalContent = document.getElementById('modal-content');
+    const studentForm = document.getElementById('student-form');
+
+    // Open Modal
+    function openAddModal() {
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modalContent.classList.remove('scale-95', 'opacity-0');
+      }, 50);
+    }
+
+    // Close Modal
+    function closeAddModal() {
+      modalContent.classList.add('scale-95', 'opacity-0');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+        studentForm.reset();
+      }, 300);
+    }
+
+    // Fetch and render students list
+    async function loadStudents() {
+      try {
+        cachedStudents = await fetchStudents();
+        renderStudents(cachedStudents);
+      } catch (err) {
+        showToast('Error connecting to backend API.', 'error');
+      }
+    }
+
+    function renderStudents(studentsList) {
+      tableBody.innerHTML = '';
+      if (studentsList.length === 0) {
+        emptyState.classList.remove('hidden');
+        studentCountLabel.innerText = '0 registered students';
+        return;
+      }
+      
+      emptyState.classList.add('hidden');
+      studentCountLabel.innerText = `${studentsList.length} registered students`;
+
+      studentsList.forEach(student => {
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-slate-50/50 transition-colors duration-150 group';
+
+        row.innerHTML = `
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="flex items-center space-x-3">
+              <img src="${student.avatar}" alt="${student.name}" class="w-9 h-9 rounded-full object-cover border border-slate-100">
+              <div>
+                <div class="font-medium text-slate-800">${student.name}</div>
+                <div class="text-xs text-slate-400">Semester ${student.semester}</div>
+              </div>
+            </div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap font-mono text-xs text-slate-500">${student.rollNumber}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-xs font-medium text-slate-600">${student.course}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-center text-xs font-semibold text-slate-700">Sem ${student.semester}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-slate-500 font-mono text-xs">${student.email}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-xs text-slate-500 font-mono">${student.phone}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-right text-xs">
+            <div class="flex justify-end items-center space-x-2">
+              <a href="student-dashboard.html?roll=${student.rollNumber}" class="px-3 py-1.5 bg-blue-50 text-blue-600 font-medium rounded-lg hover:bg-blue-100 hover:text-blue-700 transition-colors flex items-center" title="View Dashboard">
+                <i data-lucide="eye" class="w-3.5 h-3.5 mr-1"></i> View
+              </a>
+              <button onclick="handleDeleteStudent('${student.rollNumber}', '${student.name}')" class="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Delete Student">
+                <i data-lucide="trash-2" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </td>
+        `;
+        tableBody.appendChild(row);
+      });
+      lucide.createIcons();
+    }
+
+    // Handle registration submission
+    studentForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const payload = {
+        name: document.getElementById('name').value.trim(),
+        rollNumber: document.getElementById('roll').value.trim().toUpperCase(),
+        semester: document.getElementById('sem').value,
+        course: document.getElementById('course').value,
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim()
+      };
+
+      try {
+        const response = await createStudent(payload);
+        if (response.success) {
+          showToast(`Student ${payload.name} registered successfully!`, 'success');
+          closeAddModal();
+          await loadStudents();
+        } else {
+          showToast(response.message || 'Failed to create student profile.', 'error');
+        }
+      } catch (err) {
+        showToast('Network error while communicating with backend.', 'error');
+      }
+    });
+
+    // Handle student delete
+    async function handleDeleteStudent(rollNumber, name) {
+      if (confirm(`CAUTION: Deleting student "${name}" (${rollNumber}) will delete all their academic results. Are you sure?`)) {
+        try {
+          const res = await deleteStudent(rollNumber);
+          if (res.success) {
+            showToast(`Student profile for ${name} removed.`, 'success');
+            await loadStudents();
+          } else {
+            showToast(res.message || 'Error removing student profile.', 'error');
+          }
+        } catch (err) {
+          showToast('Could not reach backend server to delete student.', 'error');
+        }
+      }
+    }
+
+    // Search bar filter
+    searchBar.addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      if (!q) {
+        renderStudents(cachedStudents);
+        return;
+      }
+
+      const filtered = cachedStudents.filter(s => 
+        s.name.toLowerCase().includes(q) || 
+        s.rollNumber.toLowerCase().includes(q) || 
+        s.course.toLowerCase().includes(q) || 
+        s.email.toLowerCase().includes(q)
+      );
+      renderStudents(filtered);
+    });
+
+    // Start loading
+    window.addEventListener('DOMContentLoaded', loadStudents);
+  </script>
+</body>
+</html>

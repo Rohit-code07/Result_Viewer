@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard - Result Viewer</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(59, 130, 246, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col antialiased">
+
+  <!-- Sticky Navbar -->
+  <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-blue-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16">
+        <div class="flex items-center space-x-3">
+          <div class="flex-shrink-0 flex items-center">
+            <span class="p-2 bg-blue-600 rounded-lg text-white mr-2 shadow-md shadow-blue-200">
+              <i data-lucide="graduation-cap" class="w-6 h-6"></i>
+            </span>
+            <span class="text-xl font-bold text-blue-900 tracking-tight">Result Viewer</span>
+          </div>
+          <!-- Desktop Navigation -->
+          <div class="hidden md:flex space-x-1 pl-8">
+            <a href="student-dashboard.html" class="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-medium bg-blue-50 text-blue-600 transition-all duration-200">
+              <i data-lucide="layout-dashboard" class="w-4 h-4 mr-1"></i> Dashboard
+            </a>
+            <a href="#semesters-section" class="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-all duration-200">
+              <i data-lucide="award" class="w-4 h-4 mr-1"></i> Results
+            </a>
+            <a href="profile.html" class="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-all duration-200">
+              <i data-lucide="user" class="w-4 h-4 mr-1"></i> Profile
+            </a>
+          </div>
+        </div>
+
+        <!-- Student Right Info -->
+        <div class="hidden md:flex items-center space-x-4">
+          <div class="flex items-center space-x-2 border-r border-slate-100 pr-4">
+            <img id="nav-student-avatar" src="https://api.dicebear.com/7.x/initials/svg?seed=A" class="w-8 h-8 rounded-full border border-blue-100 bg-white" alt="Avatar">
+            <span class="text-sm font-semibold text-slate-700" id="nav-student-name">Student Name</span>
+          </div>
+          <button onclick="handleLogout()" class="flex items-center space-x-1 px-4 py-2 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 hover:text-red-700 transition-all duration-200">
+            <i data-lucide="log-out" class="w-4 h-4 mr-1"></i> Logout
+          </button>
+        </div>
+
+        <!-- Mobile menu button -->
+        <div class="flex items-center md:hidden">
+          <button id="mobile-menu-btn" class="inline-flex items-center justify-center p-2 rounded-md text-slate-500 hover:text-blue-600 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
+            <i data-lucide="menu" id="hamburger-icon" class="w-6 h-6"></i>
+            <i data-lucide="x" id="close-icon" class="w-6 h-6 hidden"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Nav Menu -->
+    <div class="hidden md:hidden" id="mobile-menu">
+      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-slate-100 shadow-lg">
+        <a href="student-dashboard.html" class="flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium bg-blue-50 text-blue-600">
+          <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="#semesters-section" onclick="toggleMobileMenu()" class="flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600">
+          <i data-lucide="award" class="w-5 h-5"></i>
+          <span>Results</span>
+        </a>
+        <a href="profile.html" class="flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-50 hover:text-blue-600">
+          <i data-lucide="user" class="w-5 h-5"></i>
+          <span>Profile</span>
+        </a>
+        <div class="border-t border-slate-100 my-2 pt-2">
+          <button onclick="handleLogout()" class="w-full flex items-center space-x-2 px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-red-50 hover:text-red-700">
+            <i data-lucide="log-out" class="w-5 h-5"></i>
+            <span>Logout</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content Container -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Top section: Student Details Banner -->
+    <div class="glass-card rounded-3xl p-6 md:p-8 shadow-sm border border-blue-50 bg-gradient-to-r from-blue-50/50 via-white to-indigo-50/20 mb-10 overflow-hidden relative">
+      <!-- Ambient light effect -->
+      <div class="absolute -right-16 -top-16 w-48 h-48 rounded-full bg-blue-400/10 blur-3xl pointer-events-none"></div>
+      
+      <div class="flex flex-col md:flex-row items-center md:items-start gap-6 relative z-10">
+        <!-- Profile Pic -->
+        <img id="student-avatar" src="https://api.dicebear.com/7.x/initials/svg?seed=A" alt="Profile" class="w-24 h-24 rounded-2xl object-cover shadow-md shadow-blue-100/50 border-2 border-white ring-4 ring-blue-50">
+        
+        <!-- Info Grid -->
+        <div class="flex-grow text-center md:text-left">
+          <div class="flex flex-col md:flex-row md:items-center gap-2 mb-2 justify-center md:justify-start">
+            <h1 class="text-2xl md:text-3xl font-extrabold text-blue-900 tracking-tight" id="student-name">Loading...</h1>
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 self-center" id="student-sem-badge">Sem -</span>
+          </div>
+          <p class="text-sm font-mono text-slate-500 mb-4" id="student-roll">Roll No: -</p>
+          
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-4 border-t border-slate-100">
+            <div>
+              <span class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Course / Branch</span>
+              <span class="text-sm font-bold text-slate-700 mt-1 block" id="student-course">-</span>
+            </div>
+            <div>
+              <span class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Email Address</span>
+              <span class="text-sm font-mono text-slate-600 mt-1 block truncate" id="student-email">-</span>
+            </div>
+            <div>
+              <span class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Phone number</span>
+              <span class="text-sm font-mono text-slate-600 mt-1 block" id="student-phone">-</span>
+            </div>
+            <div>
+              <span class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Cumulative GPA (CGPA)</span>
+              <span class="text-xl font-extrabold text-blue-600 mt-0.5 block" id="student-cgpa">0.00</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Quick Selection for testing different students -->
+    <div id="demo-bar" class="hidden glass-card rounded-xl p-4 mb-8 bg-blue-50 border border-blue-100 flex items-center justify-between">
+      <div class="text-xs text-blue-800 font-medium">
+        <strong>Demo Mode:</strong> You can select a different student's report sheet to view:
+      </div>
+      <div class="flex items-center space-x-2">
+        <select id="student-demo-select" class="text-xs px-2 py-1.5 border border-blue-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 bg-white">
+          <!-- Filled dynamically -->
+        </select>
+      </div>
+    </div>
+
+    <!-- Results Section Title -->
+    <div class="mb-6" id="semesters-section">
+      <h2 class="text-xl font-bold text-blue-900">Academic Semester Transcripts</h2>
+      <p class="text-xs text-slate-400 mt-0.5">Select a semester card to inspect the full marksheet, grades, and percentage points.</p>
+    </div>
+
+    <!-- Semester Cards Grid (1-6) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12" id="semester-grid-container">
+      <!-- 6 cards rendered dynamically -->
+    </div>
+
+  </main>
+
+  <!-- Sticky Footer -->
+  <footer class="bg-white border-t border-slate-100 py-6 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-400">
+      &copy; 2026 Result Viewer System. Built with Tailwind CSS and Vanilla JS.
+    </div>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2"></div>
+
+  <!-- API scripts -->
+  <script src="js/api.js"></script>
+  <script>
+    lucide.createIcons();
+
+    // Register toast receiver
+    window.addEventListener('api-toast', (e) => {
+      showToast(e.detail.message, e.detail.type);
+    });
+
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const hamburgerIcon = document.getElementById('hamburger-icon');
+    const closeIcon = document.getElementById('close-icon');
+
+    mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+
+    function toggleMobileMenu() {
+      const isHidden = mobileMenu.classList.contains('hidden');
+      if (isHidden) {
+        mobileMenu.classList.remove('hidden');
+        hamburgerIcon.classList.add('hidden');
+        closeIcon.classList.remove('hidden');
+      } else {
+        mobileMenu.classList.add('hidden');
+        hamburgerIcon.classList.remove('hidden');
+        closeIcon.classList.add('hidden');
+      }
+    }
+
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      let classes = 'bg-emerald-50 border-emerald-100 text-emerald-800';
+      let icon = 'check-circle';
+      
+      if (type === 'error') {
+        classes = 'bg-red-50 border-red-100 text-red-800';
+        icon = 'alert-circle';
+      } else if (type === 'warning') {
+        classes = 'bg-amber-50 border-amber-100 text-amber-800';
+        icon = 'alert-triangle';
+      }
+      
+      toast.className = `flex items-center space-x-2 px-4 py-3 rounded-xl shadow-lg border transition-all duration-300 translate-y-2 opacity-0 text-sm font-medium ${classes}`;
+      toast.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4 flex-shrink-0"></i><span>${message}</span>`;
+      
+      const container = document.getElementById('toast-container');
+      container.appendChild(toast);
+      lucide.createIcons();
+      
+      setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 50);
+      setTimeout(() => {
+        toast.classList.add('translate-y-2', 'opacity-0');
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    function handleLogout() {
+      clearSession();
+    }
+
+    // STATE CONTROLLERS
+    let activeStudent = null;
+
+    async function loadDashboard() {
+      // Determine active student
+      const params = new URLSearchParams(window.location.search);
+      let roll = params.get('roll');
+      
+      if (!roll) {
+        const session = getSessionUser();
+        roll = session ? session.studentRoll : 'STU001';
+      }
+
+      // Sync active session user
+      setSessionUser('student', roll);
+
+      try {
+        activeStudent = await fetchStudentByRoll(roll);
+        if (!activeStudent) {
+          showToast(`Student with Roll Number ${roll} not found.`, 'error');
+          // If fallback fails, show dummy structure
+          renderStudentDashboard({
+            rollNumber: roll,
+            name: "Unknown Student",
+            course: "Computer Science",
+            semester: "1",
+            cgpa: 0,
+            email: "-",
+            phone: "-",
+            avatar: "https://api.dicebear.com/7.x/initials/svg?seed=U",
+            results: {}
+          });
+        } else {
+          renderStudentDashboard(activeStudent);
+        }
+
+        // Setup demo selection switcher
+        await setupDemoSelector(roll);
+
+      } catch (err) {
+        console.error(err);
+        showToast('Error fetching student details.', 'error');
+      }
+    }
+
+    function renderStudentDashboard(student) {
+      // Populate Details Banner
+      document.getElementById('student-name').innerText = student.name;
+      document.getElementById('nav-student-name').innerText = student.name;
+      document.getElementById('student-roll').innerText = `Roll No: ${student.rollNumber}`;
+      document.getElementById('student-course').innerText = student.course;
+      document.getElementById('student-email').innerText = student.email;
+      document.getElementById('student-phone').innerText = student.phone;
+      document.getElementById('student-cgpa').innerText = student.cgpa ? student.cgpa.toFixed(2) : "0.00";
+      document.getElementById('student-sem-badge').innerText = `Sem ${student.semester}`;
+      
+      // Avatars
+      const av = student.avatar || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(student.name)}`;
+      document.getElementById('student-avatar').src = av;
+      document.getElementById('nav-student-avatar').src = av;
+
+      // Populate 6 Semesters Grid
+      const gridContainer = document.getElementById('semester-grid-container');
+      gridContainer.innerHTML = '';
+
+      for (let sem = 1; sem <= 6; sem++) {
+        const result = student.results && student.results[sem.toString()];
+        const card = document.createElement('div');
+        
+        if (result) {
+          // Card WITH grades published (Gradient Background)
+          const pass = result.status.toLowerCase() === 'pass';
+          const bgGradient = pass 
+            ? 'from-blue-600 via-blue-500 to-indigo-600 text-white' 
+            : 'from-orange-500 to-red-600 text-white';
+
+          const badgeClasses = pass
+            ? 'bg-white/20 border-white/30 text-white'
+            : 'bg-white/20 border-white/30 text-white';
+
+          card.className = `rounded-2xl p-6 bg-gradient-to-br ${bgGradient} shadow-md hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-56 relative overflow-hidden group`;
+          
+          card.innerHTML = `
+            <!-- Wave Graphic Background -->
+            <div class="absolute -right-8 -bottom-8 w-24 h-24 rounded-full bg-white/10 group-hover:scale-125 transition-transform duration-500"></div>
+            
+            <div>
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg font-bold">Semester ${sem}</h3>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold border ${badgeClasses}">
+                  ${result.status}
+                </span>
+              </div>
+              <p class="text-xs text-blue-100/80 mt-1">Grades published online</p>
+            </div>
+            
+            <div class="mt-4">
+              <div class="text-3xl font-extrabold flex items-baseline">
+                ${result.sgpa.toFixed(2)}
+                <span class="text-xs font-normal text-blue-100/70 ml-1.5">SGPA</span>
+              </div>
+            </div>
+
+            <div class="mt-4 pt-4 border-t border-white/10 flex justify-end">
+              <a href="semester-result.html?roll=${student.rollNumber}&sem=${sem}" class="px-4 py-2 bg-white text-blue-900 rounded-xl font-bold text-xs shadow-sm hover:bg-blue-50 hover:shadow-md transition-all flex items-center">
+                View Result <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-1"></i>
+              </a>
+            </div>
+          `;
+        } else {
+          // Card WITHOUT grades published (Gray Glass Card)
+          card.className = 'glass-card rounded-2xl p-6 shadow-sm flex flex-col justify-between h-56 hover:-translate-y-1 hover:shadow-md transition-all duration-300';
+          
+          card.innerHTML = `
+            <div>
+              <div class="flex justify-between items-start">
+                <h3 class="text-lg font-bold text-slate-800">Semester ${sem}</h3>
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border bg-slate-100 border-slate-200 text-slate-500">
+                  Not Declared
+                </span>
+              </div>
+              <p class="text-xs text-slate-400 mt-1">Academic term evaluation</p>
+            </div>
+            
+            <div class="mt-4 text-center py-2 bg-slate-50 border border-dashed border-slate-100 rounded-xl">
+              <span class="text-xs text-slate-400 font-medium">Awaiting Grade sheet</span>
+            </div>
+
+            <div class="mt-4 pt-4 border-t border-slate-100 flex justify-end">
+              <button disabled class="px-4 py-2 bg-slate-100 text-slate-400 rounded-xl font-bold text-xs cursor-not-allowed flex items-center">
+                Not Released
+              </button>
+            </div>
+          `;
+        }
+        gridContainer.appendChild(card);
+      }
+      lucide.createIcons();
+    }
+
+    // Swapper Demo Bar helper
+    async function setupDemoSelector(currentRoll) {
+      try {
+        const students = await fetchStudents();
+        if (students.length > 1) {
+          const select = document.getElementById('student-demo-select');
+          select.innerHTML = ''; // reset
+          
+          students.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s.rollNumber;
+            opt.innerText = `${s.name} (${s.rollNumber})`;
+            if (s.rollNumber.toUpperCase() === currentRoll.toUpperCase()) {
+              opt.selected = true;
+            }
+            select.appendChild(opt);
+          });
+
+          // Show demo switch bar
+          document.getElementById('demo-bar').classList.remove('hidden');
+
+          select.addEventListener('change', (e) => {
+            const selected = e.target.value;
+            window.location.href = `student-dashboard.html?roll=${selected}`;
+          });
+        }
+      } catch (err) {
+        console.warn('Demo switcher not available', err);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', loadDashboard);
+  </script>
+</body>
+</html>

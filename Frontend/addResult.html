@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Add Result</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-900 min-h-screen py-10">
+
+<div class="max-w-5xl mx-auto px-4">
+
+    <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
+
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-8">
+            <h1 class="text-3xl font-bold">Add Student Result</h1>
+            <p class="text-blue-100 mt-2">
+                Fill in the student's academic details carefully.
+            </p>
+        </div>
+
+        <form id="resultForm" class="p-8 md:p-10 space-y-10">
+
+            <!-- Student Information -->
+            <div>
+
+                <h2 class="text-xl font-bold text-gray-800 border-b border-gray-200 pb-3 mb-6">
+                    Student Information
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-6">
+
+                    <div>
+                        <label class="block font-semibold text-gray-700 mb-2">
+                            Student Name
+                        </label>
+
+                        <input
+                                type="text"
+                                name="studentName"
+                                required
+                                placeholder="Enter student name"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold text-gray-700 mb-2">
+                            Roll Number
+                        </label>
+
+                        <input
+                                type="text"
+                                name="rollNumber"
+                                required
+                                placeholder="Enter roll number"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold text-gray-700 mb-2">
+                            Course
+                        </label>
+
+                        <input
+                                type="text"
+                                name="course"
+                                placeholder="B.Tech CSE"
+                                required
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold text-gray-700 mb-2">
+                            Semester
+                        </label>
+
+                        <select
+                                name="semester"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
+
+                            <option>Semester 1</option>
+                            <option>Semester 2</option>
+                            <option>Semester 3</option>
+                            <option>Semester 4</option>
+                            <option>Semester 5</option>
+                            <option>Semester 6</option>
+                            <option>Semester 7</option>
+                            <option>Semester 8</option>
+
+                        </select>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Subject Marks -->
+
+            <div>
+
+                <div class="flex justify-between items-center mb-6">
+
+                    <h2 class="text-xl font-bold text-gray-800">
+                        Subject Marks
+                    </h2>
+
+                    <button
+                            type="button"
+                            onclick="addSubject()"
+                            class="bg-gradient-to-r from-green-500 to-emerald-600 hover:opacity-90 transition text-white px-5 py-2 rounded-lg font-semibold shadow-lg">
+
+                        + Add Subject
+
+                    </button>
+
+                </div>
+
+                <div id="subjectsContainer" class="space-y-4">
+
+                    <div class="grid md:grid-cols-2 gap-4 subject-row">
+
+                        <input
+                                type="text"
+                                name="subjectNames"
+                                placeholder="Subject Name"
+                                class="border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none">
+
+                        <input
+                                type="number"
+                                name="subjectMarks"
+                                placeholder="Marks"
+                                min="0"
+                                max="100"
+                                class="border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Result Summary -->
+
+            <div>
+
+                <h2 class="text-xl font-bold text-gray-800 border-b border-gray-200 pb-3 mb-6">
+                    Result Summary
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-6">
+
+                    <div>
+
+                        <label class="block font-semibold text-gray-700 mb-2">
+                            Total Marks
+                        </label>
+
+                        <input
+                                type="number"
+                                name="totalMarks"
+                                placeholder="Enter total marks"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none">
+
+                    </div>
+
+                    <div>
+
+                        <label class="block font-semibold text-gray-700 mb-2">
+                            Percentage
+                        </label>
+
+                        <input
+                                type="number"
+                                step="0.01"
+                                name="percentage"
+                                placeholder="Enter percentage"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none">
+
+                    </div>
+
+                    <div>
+
+                        <label class="block font-semibold text-gray-700 mb-2">
+                            Grade
+                        </label>
+
+                        <input
+                                type="text"
+                                name="grade"
+                                placeholder="A+"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none">
+
+                    </div>
+
+                    <div>
+
+                        <label class="block font-semibold text-gray-700 mb-2">
+                            Result Status
+                        </label>
+
+                        <select
+                                name="resultStatus"
+                                class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none">
+
+                            <option>PASS</option>
+                            <option>FAIL</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Submit Button -->
+
+            <div class="text-center">
+
+                <button
+                        type="submit"
+                        class="w-full md:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:opacity-90 transition text-white px-12 py-3 rounded-lg text-lg font-semibold shadow-lg">
+
+                    Save Result
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+
+    function addSubject() {
+
+        const container = document.getElementById("subjectsContainer");
+
+        const row = document.createElement("div");
+
+        row.className = "grid md:grid-cols-2 gap-4 subject-row";
+
+        row.innerHTML = `
+            <input
+                type="text"
+                name="subjectNames"
+                placeholder="Subject Name"
+                class="border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none">
+
+            <input
+                type="number"
+                name="subjectMarks"
+                placeholder="Marks"
+                min="0"
+                max="100"
+                class="border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none">
+        `;
+
+        container.appendChild(row);
+    }
+
+    document.getElementById("resultForm").addEventListener("submit", async function (e) {
+
+        e.preventDefault();
+
+        const subjectNames = document.getElementsByName("subjectNames");
+        const subjectMarks = document.getElementsByName("subjectMarks");
+
+        const subjects = {};
+
+        for (let i = 0; i < subjectNames.length; i++) {
+
+            if (subjectNames[i].value.trim() !== "") {
+                subjects[subjectNames[i].value] = parseInt(subjectMarks[i].value);
+            }
+        }
+
+        const data = {
+
+            studentName: document.getElementsByName("studentName")[0].value,
+
+            rollNumber: document.getElementsByName("rollNumber")[0].value,
+
+            course: document.getElementsByName("course")[0].value,
+
+            semester: document.getElementsByName("semester")[0].value,
+
+            subjects: subjects,
+
+            totalMarks: parseInt(document.getElementsByName("totalMarks")[0].value),
+
+            percentage: parseFloat(document.getElementsByName("percentage")[0].value),
+
+            grade: document.getElementsByName("grade")[0].value,
+
+            resultStatus: document.getElementsByName("resultStatus")[0].value
+
+        };
+
+        const response = await fetch("/add-result", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(data)
+
+        });
+
+        const message = await response.text();
+
+        alert(message);
+
+    });
+
+</script>
+
+</body>
+</html>
